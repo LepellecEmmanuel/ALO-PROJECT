@@ -3,32 +3,20 @@ package alo.cartaylor.project.v1.api.impl;
 import alo.cartaylor.project.v1.api.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class ConfiguratorImpl implements Configurator {
-    private final Set<Category> categories;
-    private final Map<Category, Set<PartType>> variants;
+    private final Set<Category> categories = CategoryFactory.generate();
+    private final Set<PartType> partTypes = PartTypeFactory.generate();
     private final Configuration configuration;
     private final CompatibilityChecker compatibilityChecker;
 
-    protected ConfiguratorImpl(Set<Category> categories,
-                            Map<Category, Set<PartType>> variants,
-                            Configuration configuration,
-                            CompatibilityChecker compatibilityChecker) {
-        if (categories == null || variants == null || configuration == null || compatibilityChecker == null) {
-            throw new IllegalArgumentException("Arguments cannot be null");
-        }
-        this.categories = Set.copyOf(categories);
-        this.variants = new HashMap<>();
-        for (Map.Entry<Category, Set<PartType>> entry : variants.entrySet()) {
-            if (entry.getKey() == null || entry.getValue() == null) {
-                throw new IllegalArgumentException("Category and variants cannot be null");
-            }
-            this.variants.put(entry.getKey(), Set.copyOf(entry.getValue()));
-        }
+    public ConfiguratorImpl(Configuration configuration, CompatibilityChecker compatibilityChecker) {
         this.configuration = configuration;
         this.compatibilityChecker = compatibilityChecker;
     }
+
 
     @Override
     public Set<Category> getCategories() {
@@ -40,7 +28,7 @@ public class ConfiguratorImpl implements Configurator {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
-        return variants.getOrDefault(category, Set.of());
+        return partTypes.stream().filter(partType -> partType.getCategory().equals(category)).collect(Collectors.toSet());
     }
 
     @Override
