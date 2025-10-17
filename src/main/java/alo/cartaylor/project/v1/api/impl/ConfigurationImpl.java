@@ -14,6 +14,7 @@ public class ConfigurationImpl implements Configuration {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
+
     }
 
     private void checkPartType(PartType partType) {
@@ -40,7 +41,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public Set<PartType> getSelectedParts() {
-        return Collections.unmodifiableSet(new HashSet<>(selections.values()));
+        return Set.copyOf(selections.values());
     }
 
     @Override

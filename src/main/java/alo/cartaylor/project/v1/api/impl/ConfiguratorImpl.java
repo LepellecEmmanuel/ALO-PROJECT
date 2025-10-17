@@ -9,14 +9,8 @@ import java.util.stream.Collectors;
 public class ConfiguratorImpl implements Configurator {
     private final Set<Category> categories = CategoryFactory.generate();
     private final Set<PartType> partTypes = PartTypeFactory.generate();
-    private final Configuration configuration;
-    private final CompatibilityChecker compatibilityChecker;
-
-    public ConfiguratorImpl(Configuration configuration, CompatibilityChecker compatibilityChecker) {
-        this.configuration = configuration;
-        this.compatibilityChecker = compatibilityChecker;
-    }
-
+    private final Configuration configuration = new ConfigurationImpl();
+    private final CompatibilityChecker compatibilityChecker = new CompatibilityManagerImpl();
 
     @Override
     public Set<Category> getCategories() {
