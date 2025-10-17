@@ -12,7 +12,7 @@ public interface CompatibilityChecker {
      * @throws IllegalArgumentException if reference is null or not an instance of PartTypeImpl
      * @return all partTypes that are incompatibles with reference
      */
-    Set<PartType> getIncompatibilities(PartType reference) throws IllegalAccessException;
+    Set<PartType> getIncompatibilities(PartType reference) throws IllegalArgumentException;
 
     /**
      *

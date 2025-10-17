@@ -4,80 +4,105 @@ import alo.cartaylor.project.v1.api.CompatibilityManager;
 import alo.cartaylor.project.v1.api.PartType;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CompatibilityManagerImpl implements CompatibilityManager {
 
     private final Map<PartType, Set<PartType>> incompatibilities = new HashMap<>();
     private final Map<PartType, Set<PartType>> requirements = new HashMap<>();
 
-    private void checkPartType(PartType reference) {
+    private void checkThatReferenceIsValid(PartType reference) {
         if (reference == null) {
-            throw new IllegalArgumentException("Reference cannot be null");
+            throw new IllegalArgumentException("reference is required!");
         }
         if (!(reference instanceof PartTypeImpl)) {
-            throw new IllegalArgumentException("Reference must be a PartTypeImpl");
+            throw new IllegalArgumentException("invalid reference type!");
         }
     }
 
-    private void checkTargetSet(Set<PartType> target) {
-        if (target == null) {
-            throw new IllegalArgumentException("Target set cannot be null");
+    private void checkThatTargetIsValid(Set<PartType> target, PartType reference) {
+        if (target == null || target.isEmpty()) {
+            throw new IllegalArgumentException("target is required!");
         }
-        for (PartType pt : target) {
-            if (pt == null) {
-                throw new IllegalArgumentException("Target set cannot contain null");
+        if (target.contains(reference)) {
+            throw new IllegalArgumentException("reference cannot be contained in target!");
+        }
+    }
+
+    @Override
+    public Set<PartType> getIncompatibilities(PartType reference) {
+        checkThatReferenceIsValid(reference);
+        return Collections.unmodifiableSet(incompatibilities.getOrDefault(reference, Set.of()));
+    }
+
+    @Override
+    public Set<PartType> getRequirements(PartType reference) {
+        checkThatReferenceIsValid(reference);
+        return Collections.unmodifiableSet(requirements.getOrDefault(reference, Set.of()));
+    }
+
+    @Override
+    public void addIncompatibilities(PartType reference, Set<PartType> target) {
+        checkThatReferenceIsValid(reference);
+        checkThatTargetIsValid(target, reference);
+        if(!Collections.disjoint(getRequirementsGraphSet(reference), target)) {
+            throw new IllegalArgumentException("target incompatible with reference requirements!");
+        }
+        incompatibilities.computeIfAbsent(reference, __ -> new HashSet<>())
+                .addAll(target.stream().filter(partType -> !incompatibilities.getOrDefault(partType, Set.of()).contains(reference)).collect(Collectors.toSet()));
+    }
+
+    private Set<PartType> getRequirementsGraphSet(PartType reference) {
+        Set<PartType> visited = new HashSet<>();
+        collectRequirements(reference, visited);
+        return Collections.unmodifiableSet(visited);
+    }
+
+    private void collectRequirements(PartType current, Set<PartType> visited) {
+        for (PartType requirement : requirements.getOrDefault(current, Set.of())) {
+            if (visited.add(requirement)) {
+                collectRequirements(requirement, visited);
             }
-            if (!(pt instanceof PartTypeImpl)) {
-                throw new IllegalArgumentException("Target set must contain only PartTypeImpl");
-            }
         }
     }
 
-    @Override
-    public synchronized Set<PartType> getIncompatibilities(PartType reference) {
-        checkPartType(reference);
-        return Collections.unmodifiableSet(incompatibilities.getOrDefault(reference, Collections.emptySet()));
+    private boolean addingReferenceDoNotCreateCycleInPartTypeRequirementsGraph(PartType reference, PartType partType) {
+        return !getRequirementsGraphSet(partType).contains(reference);
     }
 
     @Override
-    public synchronized Set<PartType> getRequirements(PartType reference) {
-        checkPartType(reference);
-        return Collections.unmodifiableSet(requirements.getOrDefault(reference, Collections.emptySet()));
+    public  void addRequirements(PartType reference, Set<PartType> target) {
+        checkThatReferenceIsValid(reference);
+        checkThatTargetIsValid(target, reference);
+        if(!Collections.disjoint(incompatibilities.getOrDefault(reference, Set.of()), target)) {
+            throw new IllegalArgumentException("target incompatible with reference incompatibilities!");
+        }
+        requirements.computeIfAbsent(reference, __ -> new HashSet<>())
+                .addAll(target.stream().filter(partType ->
+                        !getRequirementsGraphSet(reference).contains(partType) && addingReferenceDoNotCreateCycleInPartTypeRequirementsGraph(reference, partType))
+                        .collect(Collectors.toSet())
+                );
     }
 
     @Override
-    public synchronized void addIncompatibilities(PartType reference, Set<PartType> target) {
-        checkPartType(reference);
-        checkTargetSet(target);
-        incompatibilities.computeIfAbsent(reference, k -> new HashSet<>()).addAll(target);
-    }
-
-    @Override
-    public synchronized void addRequirements(PartType reference, Set<PartType> target) {
-        checkPartType(reference);
-        checkTargetSet(target);
-        requirements.computeIfAbsent(reference, k -> new HashSet<>()).addAll(target);
-    }
-
-    @Override
-    public synchronized void removeIncompatibility(PartType reference, PartType target) {
-        checkPartType(reference);
-        checkPartType(target);
+    public void removeIncompatibility(PartType reference, PartType target) {
+        checkThatReferenceIsValid(reference);
+        checkThatTargetIsValid(Set.of(target), reference);
         Set<PartType> set = incompatibilities.get(reference);
-        if (set != null) {
-            set.remove(target);
-            if (set.isEmpty()) incompatibilities.remove(reference);
+        if(!incompatibilities.getOrDefault(reference, Set.of()).contains(target)) {
+            throw new IllegalArgumentException("target not present in reference incompatibilities!");
         }
+        incompatibilities.get(reference).remove(target);
     }
 
     @Override
-    public synchronized void removeRequirement(PartType reference, PartType target) {
-        checkPartType(reference);
-        checkPartType(target);
+    public void removeRequirement(PartType reference, PartType target) {
+        checkThatReferenceIsValid(reference);
+        checkThatTargetIsValid(Set.of(target), reference);
         Set<PartType> set = requirements.get(reference);
-        if (set != null) {
-            set.remove(target);
-            if (set.isEmpty()) requirements.remove(reference);
+        if(!requirements.getOrDefault(reference, Set.of()).contains(target)) {
+            throw new IllegalArgumentException("target not present in reference requirements!");
         }
+        requirements.get(reference).remove(target);
     }
 }

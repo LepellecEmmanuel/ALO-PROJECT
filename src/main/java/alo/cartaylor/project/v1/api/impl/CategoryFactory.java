@@ -12,7 +12,7 @@ public class CategoryFactory {
         categories.add(new CategoryImpl("Engine"));
         categories.add(new CategoryImpl("Transmission"));
         categories.add(new CategoryImpl("Exterior"));
-        categories.add(new CategoryImpl("interior"));
+        categories.add(new CategoryImpl("Interior"));
         return Collections.unmodifiableSet(categories);
     }
 }

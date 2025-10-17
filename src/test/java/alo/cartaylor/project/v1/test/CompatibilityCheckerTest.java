@@ -4,22 +4,58 @@ package alo.cartaylor.project.v1.test;
 import alo.cartaylor.project.v1.api.CompatibilityChecker;
 import alo.cartaylor.project.v1.api.PartType;
 import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
+import alo.cartaylor.project.v1.api.impl.PartTypeFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
 import alo.cartaylor.project.v1.api.CompatibilityChecker;
 
+import java.util.List;
+import java.util.Set;
+
 public class CompatibilityCheckerTest {
+    private CompatibilityChecker checker;
+    private List<PartType> partTypes;
+
+    @BeforeEach
+    public void setUp() {
+        checker = new CompatibilityManagerImpl();
+        partTypes = List.of(PartTypeFactory.generate().toArray(new PartType[0]));
+    }
 
     @Test
-    public void testThatGetIncompatibilitiesThrowsIllegalArgumentExceptionIfTargetIsNull() {
+    public void testThatGetIncompatibilitiesThrowsIllegalArgumentExceptionIfReferenceIsNull() {
         PartType reference = null;
-        CompatibilityChecker checker = new CompatibilityManagerImpl();
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             checker.getIncompatibilities(reference);
         });
-        // Arrange dsdsdsdsdsfsfsfsfsfsfsfsf
+    }
+
+    @Test
+    public void testThatGetRequirementsThrowsIllegalArgumentExceptionIfReferenceIsNull() {
+        PartType reference = null;
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            checker.getRequirements(reference);
+        });
+    }
+
+    @Test
+    public void testThatGetIncompatibilitiesReturnAnImmutableSet() {
+        PartType reference = partTypes.getFirst();
+        Set<PartType> result = checker.getIncompatibilities(reference);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            result.add(reference);
+        });
+    }
+
+    @Test
+    public void testThatGetRequirementsReturnAnImmutableSet() {
+        PartType reference = partTypes.getFirst();
+        Set<PartType> result = checker.getRequirements(reference);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            result.add(reference);
+        });
     }
 
 }
