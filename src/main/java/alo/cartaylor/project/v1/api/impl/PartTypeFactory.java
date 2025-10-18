@@ -20,7 +20,7 @@ public class PartTypeFactory {
         partypes.add(new PartTypeImpl("EG100", getCategory("Engine")));
         partypes.add(new PartTypeImpl("EG133", getCategory("Engine")));
         partypes.add(new PartTypeImpl("EG210", getCategory("Engine")));
-        partypes.add(new PartTypeImpl("EG110", getCategory("Engine")));
+        partypes.add(new PartTypeImpl("ED110", getCategory("Engine")));
         partypes.add(new PartTypeImpl("ED180", getCategory("Engine")));
         partypes.add(new PartTypeImpl("EH120", getCategory("Engine")));
         partypes.add(new PartTypeImpl("TM5", getCategory("Transmission")));

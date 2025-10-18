@@ -21,7 +21,7 @@ public class CompatibilityCheckerTest {
     @BeforeEach
     public void setUp() {
         checker = new CompatibilityManagerImpl();
-        partTypes = List.of(PartTypeFactory.generate().toArray(new PartType[0]));
+        partTypes = List.copyOf(PartTypeFactory.generate());
     }
 
     @Test

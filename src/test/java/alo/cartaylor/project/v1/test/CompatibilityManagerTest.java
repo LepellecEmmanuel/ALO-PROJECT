@@ -18,7 +18,7 @@ public class CompatibilityManagerTest {
     @BeforeEach
     public void setUp() {
         manager = new CompatibilityManagerImpl();
-        partTypes = List.of(PartTypeFactory.generate().toArray(new PartType[0]));
+        partTypes = List.copyOf(PartTypeFactory.generate());
     }
 
     @Test
