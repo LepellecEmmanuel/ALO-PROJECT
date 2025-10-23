@@ -2,8 +2,10 @@ package alo.cartaylor.project.v1.test;
 
 
 import alo.cartaylor.project.v1.api.CompatibilityChecker;
+import alo.cartaylor.project.v1.api.Configurator;
 import alo.cartaylor.project.v1.api.PartType;
 import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
+import alo.cartaylor.project.v1.api.impl.ConfiguratorImpl;
 import alo.cartaylor.project.v1.api.impl.PartTypeFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,13 +17,13 @@ import java.util.List;
 import java.util.Set;
 
 public class CompatibilityCheckerTest {
+    private Configurator configurator;
     private CompatibilityChecker checker;
-    private List<PartType> partTypes;
 
     @BeforeEach
     public void setUp() {
-        checker = new CompatibilityManagerImpl();
-        partTypes = List.copyOf(PartTypeFactory.generate());
+        configurator = new ConfiguratorImpl();
+        checker = configurator.getCompatibilityChecker();
     }
 
     @Test
@@ -42,7 +44,7 @@ public class CompatibilityCheckerTest {
 
     @Test
     public void testThatGetIncompatibilitiesReturnAnImmutableSet() {
-        PartType reference = partTypes.getFirst();
+        PartType reference = TestUtils.getPartTypeByName(configurator, "EG100");
         Set<PartType> result = checker.getIncompatibilities(reference);
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             result.add(reference);
@@ -51,7 +53,7 @@ public class CompatibilityCheckerTest {
 
     @Test
     public void testThatGetRequirementsReturnAnImmutableSet() {
-        PartType reference = partTypes.getFirst();
+        PartType reference = TestUtils.getPartTypeByName(configurator, "EG100");
         Set<PartType> result = checker.getRequirements(reference);
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             result.add(reference);

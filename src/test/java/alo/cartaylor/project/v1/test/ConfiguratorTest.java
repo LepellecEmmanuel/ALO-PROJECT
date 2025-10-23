@@ -13,12 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ConfiguratorTest {
-    Configurator configurator;
-
-    private Category getCategory(String categoryName) {
-        return configurator.getCategories().stream().filter(category -> category.getName().equals("Engine")).findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-    }
+    private Configurator configurator;
 
     @BeforeEach
     public void setup() {
@@ -40,7 +35,7 @@ public class ConfiguratorTest {
     @Test
     public void testThatGetVariantsReturnsCorrectVariantsForCategoryEngine() {
         Set<String> expectedVariants = Set.of("EG100", "EG133", "EG210", "ED110", "ED180", "EH120");
-        Set<String> variants = configurator.getVariants(getCategory("Engine")).stream().map(PartType::getName).collect(Collectors.toSet());
+        Set<String> variants = configurator.getVariants(TestUtils.getCategoryByName(configurator, "Engine")).stream().map(PartType::getName).collect(Collectors.toSet());
         Assertions.assertEquals(expectedVariants, variants);
     }
 }
