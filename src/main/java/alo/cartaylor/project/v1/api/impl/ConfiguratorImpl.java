@@ -8,7 +8,7 @@ public class ConfiguratorImpl implements Configurator {
     private final Set<Category> categories = CategoryFactory.generate();
     private final Set<PartType> partTypes = PartTypeFactory.generate();
     private final CompatibilityChecker checker = initCompatibilityChecker();
-    private final Configuration configuration = new ConfigurationImpl(checker, categories);
+    private final Configuration configuration = new ConfigurationImpl(checker, categories, partTypes);
 
     private PartType getPartType(String name) {
         return partTypes.stream().filter(partType ->  partType.getName().equals(name)).findFirst()

@@ -118,14 +118,6 @@ public class CompatibilityManagerTest {
     }
 
     @Test
-    public void testThatAddRequirementsCanNotCreateCyclesInRequirements() throws IllegalAccessException {
-        manager.addRequirements(partTypes.get(1), Set.of(partTypes.get(2)));
-        manager.addRequirements(partTypes.get(2), Set.of(partTypes.getFirst()));
-        manager.addRequirements(partTypes.getFirst(), Set.of(partTypes.get(1), partTypes.get(2)));
-        Assertions.assertEquals(Set.of(),  manager.getRequirements(partTypes.getFirst()));
-    }
-
-    @Test
     public void testThatAddIncompatibilitiesThrowsIllegalArgumentExceptionIfTargetAnImpliciteReferenceRequirement() {
         manager.addRequirements(partTypes.getFirst(), Set.of(partTypes.get(1)));
         manager.addRequirements(partTypes.get(1), Set.of(partTypes.get(2)));

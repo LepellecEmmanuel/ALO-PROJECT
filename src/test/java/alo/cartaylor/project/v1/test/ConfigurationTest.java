@@ -35,7 +35,21 @@ public class ConfigurationTest {
 
     @Test
     public void testThatSelectingPartUpdatesSelectedParts() {
-
+        configuration.selectPart(TestUtils.getPartTypeByName(configurator, "EG100"));
+        Assertions.assertTrue(configuration.getSelectedParts().contains(TestUtils.getPartTypeByName(configurator, "EG100")));
+        Assertions.assertEquals(configuration.getSelectionForCategory(TestUtils.getCategoryByName(configurator, "Engine")), TestUtils.getPartTypeByName(configurator, "EG100"));
     }
 
+    @Test
+    public void testThatIsValidReturnsFalseForIncompatiblePartTypes() {
+        configuration.selectPart(TestUtils.getPartTypeByName(configurator, "EG210"));
+        configuration.selectPart(TestUtils.getPartTypeByName(configurator, "XS"));
+        Assertions.assertFalse(configuration.isValid());
+    }
+
+    @Test
+    public void testThatIsValidReturnsFalseForMissingRequirements() {
+        configuration.selectPart(TestUtils.getPartTypeByName(configurator, "IS"));
+        Assertions.assertFalse(configuration.isValid());
+    }
 }

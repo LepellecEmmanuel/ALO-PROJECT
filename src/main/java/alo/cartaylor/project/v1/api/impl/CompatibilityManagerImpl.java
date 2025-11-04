@@ -66,10 +66,6 @@ public class CompatibilityManagerImpl implements CompatibilityManager {
         }
     }
 
-    private boolean addingReferenceDoNotCreateCycleInPartTypeRequirementsGraph(PartType reference, PartType partType) {
-        return !getRequirementsGraphSet(partType).contains(reference);
-    }
-
     @Override
     public  void addRequirements(PartType reference, Set<PartType> target) {
         checkThatReferenceIsValid(reference);
@@ -79,8 +75,8 @@ public class CompatibilityManagerImpl implements CompatibilityManager {
         }
         requirements.computeIfAbsent(reference, __ -> new HashSet<>())
                 .addAll(target.stream().filter(partType ->
-                        !getRequirementsGraphSet(reference).contains(partType) && addingReferenceDoNotCreateCycleInPartTypeRequirementsGraph(reference, partType))
-                        .collect(Collectors.toSet())
+                                !getRequirementsGraphSet(reference).contains(partType)
+                        ).collect(Collectors.toSet())
                 );
     }
 

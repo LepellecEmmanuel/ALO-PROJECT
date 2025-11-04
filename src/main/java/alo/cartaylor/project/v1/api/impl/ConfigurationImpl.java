@@ -10,10 +10,12 @@ import java.util.*;
 public class ConfigurationImpl implements Configuration {
     private CompatibilityChecker checker;
     private Set<Category> categories;
+    private Set<PartType> partTypes;
 
-    protected ConfigurationImpl(CompatibilityChecker checker, Set<Category> categories) {
+    protected ConfigurationImpl(CompatibilityChecker checker, Set<Category> categories,  Set<PartType> partTypes) {
         this.checker = checker;
         this.categories = categories;
+        this.partTypes = partTypes;
     }
 
     private final Map<Category, PartType> selections = new HashMap<>();
@@ -34,10 +36,35 @@ public class ConfigurationImpl implements Configuration {
         }
     }
 
+    private boolean withoutIncompatibilitiesChain(PartType partType) {
+        Set<PartType> chain = new HashSet<>(checker.getIncompatibilities(partType));
+        for (PartType partTypeItem : partTypes) {
+            if(checker.getIncompatibilities(partTypeItem).contains(partType)) {
+                chain.add(partTypeItem);
+            }
+        }
+        return Collections.disjoint(chain, selections.values());
+    }
+
+    private Set<PartType> requirementsChain(PartType partType, PartType stop) {
+        if(checker.getRequirements(partType).isEmpty()) {
+            return new HashSet<>();
+        } else {
+            HashSet<PartType> requirements = new HashSet<>(checker.getRequirements(partType));
+            for(PartType requirement :  checker.getRequirements(partType)) {
+                if(requirement.equals(stop)) {
+                    break;
+                }
+                requirements.addAll(requirementsChain(requirement, stop));
+            }
+            return requirements;
+        }
+    }
+
     @Override
     public boolean isValid() {
-        boolean noIncompatibilities = selections.values().stream().allMatch(partType -> Collections.disjoint(checker.getIncompatibilities(partType), selections.values()));
-        boolean allRequirements = selections.values().stream().allMatch(partType -> selections.values().containsAll(checker.getRequirements(partType)));
+        boolean noIncompatibilities = selections.values().stream().allMatch(this::withoutIncompatibilitiesChain);
+        boolean allRequirements = selections.values().stream().allMatch(partType -> selections.values().containsAll(requirementsChain(partType, partType)));
         return noIncompatibilities && allRequirements;
     }
 
