@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ConfiguratorImpl implements Configurator {
     private final Set<Category> categories = CategoryFactory.generate();
-    private final Set<PartType> partTypes = PartTypeFactory.generate();
+    private final Set<PartType> partTypes = PartTypeFactoryV1.generate();
     private final Configuration configuration;
     private final CompatibilityChecker compatibilityChecker;
 
