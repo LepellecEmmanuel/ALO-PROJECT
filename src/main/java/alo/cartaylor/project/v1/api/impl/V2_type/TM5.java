@@ -2,4 +2,5 @@ package alo.cartaylor.project.v1.api.impl.V2_type;
 
 import alo.cartaylor.project.v1.api.impl.PartImpl;
 
-public class EG100 extends PartImpl { public EG100() {} }
+
+public class TM5 extends PartImpl { public TM5() {} }
