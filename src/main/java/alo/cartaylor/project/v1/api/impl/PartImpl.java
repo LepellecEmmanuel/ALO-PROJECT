@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import alo.cartaylor.project.v1.api.Category;
 import alo.cartaylor.project.v1.api.Part;
 import alo.cartaylor.project.v1.api.PartType;
-import alo.cartaylor.project.v1.api.PropertyManager;
+
 
 /**
  * Basic Part implementation with a simple PropertyManager.

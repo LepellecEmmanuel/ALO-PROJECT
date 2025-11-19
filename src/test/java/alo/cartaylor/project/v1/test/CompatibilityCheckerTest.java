@@ -5,10 +5,8 @@ import alo.cartaylor.project.v1.api.CompatibilityChecker;
 import alo.cartaylor.project.v1.api.PartType;
 import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
-import alo.cartaylor.project.v1.api.CompatibilityChecker;
+
 
 public class CompatibilityCheckerTest {
 

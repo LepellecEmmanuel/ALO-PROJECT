@@ -1,6 +1,5 @@
 package alo.cartaylor.project.v1.test;
 
-import alo.cartaylor.project.v1.api.CompatibilityChecker;
 import alo.cartaylor.project.v1.api.CompatibilityManager;
 import alo.cartaylor.project.v1.api.PartType;
 import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
