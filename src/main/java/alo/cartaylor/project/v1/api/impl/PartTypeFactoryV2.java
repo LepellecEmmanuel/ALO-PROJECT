@@ -1,5 +1,7 @@
 package alo.cartaylor.project.v1.api.impl;
 
+import alo.cartaylor.project.v1.api.Category;
+import alo.cartaylor.project.v1.api.Part;
 import alo.cartaylor.project.v1.api.PartType;
 import alo.cartaylor.project.v1.api.impl.V2_type.EG100;
 
@@ -21,11 +23,21 @@ public class PartTypeFactoryV2 {
         partypes.add(new PartTypeImpl("EG210", EG210.class, categoryFactory.getCategory("Engine")));
         partypes.add(new PartTypeImpl("EH120", EH120.class, categoryFactory.getCategory("Engine")));
 
-        partypes.add(new PartTypeImpl("TA5", TA5.class, categoryFactory.getCategory("Engine")));
-
+        partypes.add(new PartTypeImpl("TA5", TA5.class, categoryFactory.getCategory("Transmission")));
+        partypes.add(new PartTypeImpl("TC120", TC120.class, categoryFactory.getCategory("Transmission")));
+        partypes.add(new PartTypeImpl("TM5", TM5.class, categoryFactory.getCategory("Transmission")));
+        partypes.add(new PartTypeImpl("TM6", TM6.class, categoryFactory.getCategory("Transmission")));
+        partypes.add(new PartTypeImpl("TS6", TS6.class, categoryFactory.getCategory("Transmission")));
+        partypes.add(new PartTypeImpl("TSF7", TSF7.class, categoryFactory.getCategory("Transmission")));
 
         partypes.add(new PartTypeImpl("XS", XS.class, categoryFactory.getCategory("Exterior")));
+        partypes.add(new PartTypeImpl("XM", XM.class, categoryFactory.getCategory("Exterior")));
+        partypes.add(new PartTypeImpl("XS", XS.class, categoryFactory.getCategory("Exterior")));
+
         partypes.add(new PartTypeImpl("IS", IS.class, categoryFactory.getCategory("Interior")));
+        partypes.add(new PartTypeImpl("IH", IH.class, categoryFactory.getCategory("Interior")));
+        partypes.add(new PartTypeImpl("IN", IN.class, categoryFactory.getCategory("Interior")));
+
     }
 
     public PartTypeFactoryV2() {
@@ -35,10 +47,10 @@ public class PartTypeFactoryV2 {
         return  Collections.unmodifiableSet(partypes);
     }
 
-    public PartType getPartType(String name) {
+    public Part getPart(String name) {
         for (PartType partType : partypes) {
             if (partType.getName().equals(name)) {
-                return partType;
+                return partType.newInstance();
             }
         }
         return null;
