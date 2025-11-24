@@ -46,8 +46,10 @@ public class ConfigurationTest {
     @Test
     public void testThatSelectingPartUpdatesSelectedParts() {
         configuration.selectPart(factory.getPartType("EG100"));
-        Assertions.assertTrue(configuration.getSelectedParts().stream().anyMatch(part -> Objects.equals(part.getName(), "EG100")));
-        Assertions.assertTrue(configuration.getSelectionForCategory(factory.getCategory("Engine")).stream().anyMatch(category -> Objects.equals(category.getName(), "Engine")));
+        Assertions.assertTrue(configuration.getSelectedParts().stream().anyMatch(part -> Objects.equals(part.getType().getName(), "EG100")));
+        Assertions.assertEquals("EG100",
+                configuration.getSelectionForCategory(factory.getCategory("Engine")).get().getType().getName());
+
     }
 
     @Test
