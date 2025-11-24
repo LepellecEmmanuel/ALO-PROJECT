@@ -41,6 +41,6 @@ public class PartTest {
         });
     }
 
-    @Test
-    public void testThatSetValueUpdatePartType
+    //@Test
+    //public void testThatSetValueUpdatePartType
 }

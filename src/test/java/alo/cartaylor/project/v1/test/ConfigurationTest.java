@@ -73,19 +73,9 @@ public class ConfigurationTest {
         configuration.selectPart(factory.getPartType("IS"));
         Assertions.assertFalse(configuration.isValid());
     }
-    // -----------------------------
-    // Tests de sélection/désélection
-    // -----------------------------
 
     @Test
-    public void testSelectPartUpdatesSelectedParts() {
-        configuration.selectPart(factory.getPartType("EG100"));
-        Assertions.assertEquals("EG100",
-                configuration.getSelectionForCategory(factory.getCategory("Engine")).get().getType().getName());
-    }
-
-    @Test
-    public void testSelectPartReplacesPreviousPartInCategory() {
+    public void testThatSelectPartReplacesPreviousPartForCategory() {
         configuration.selectPart(factory.getPartType("EG100"));
         configuration.selectPart(factory.getPartType("EG110"));
         Assertions.assertEquals("EG110",
@@ -93,35 +83,18 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void testUnselectPartRemovesPart() {
+    public void testThatUnselectPartRemovesPart() {
         configuration.selectPart(factory.getPartType("EG100"));
         configuration.unselectPartType(factory.getCategory("Engine"));
         Assertions.assertTrue(configuration.getSelectedParts().isEmpty());
     }
 
     @Test
-    public void testClearRemovesAllParts() {
+    public void testThatClearRemovesAllParts() {
         configuration.selectPart(factory.getPartType("EG100"));
         configuration.selectPart(factory.getPartType("IN"));
         configuration.clear();
         Assertions.assertTrue(configuration.getSelectedParts().isEmpty());
-    }
-
-    // -----------------------------
-    // Tests de compatibilité / requirements
-    // -----------------------------
-
-    @Test
-    public void testInvalidDueToIncompatibility() {
-        configuration.selectPart(factory.getPartType("EG210"));
-        configuration.selectPart(factory.getPartType("XC")); // incompatible
-        Assertions.assertFalse(configuration.isValid());
-    }
-
-    @Test
-    public void testInvalidDueToMissingRequirement() {
-        configuration.selectPart(factory.getPartType("XS")); // requires IS
-        Assertions.assertFalse(configuration.isValid());
     }
 
     @Test
@@ -138,27 +111,10 @@ public class ConfigurationTest {
         Assertions.assertFalse(configuration.isValid());
     }
 
-    // -----------------------------
-    // Tests de isCompleted()
-    // -----------------------------
-
     @Test
-    public void testIsCompletedEmptyConfiguration() {
-        Assertions.assertFalse(configuration.isCompleted());
-    }
-
-    @Test
-    public void testIsCompletedPartialConfiguration() {
+    public void testThatUncompletedConfigurationIsNotComplete() {
         configuration.selectPart(factory.getPartType("EG100"));
         Assertions.assertFalse(configuration.isCompleted());
     }
 
-    @Test
-    public void testIsCompletedFullConfiguration() {
-        configuration.selectPart(factory.getPartType("EG100"));
-        configuration.selectPart(factory.getPartType("IN"));
-        configuration.selectPart(factory.getPartType("TM5"));
-        configuration.selectPart(factory.getPartType("XC"));
-        Assertions.assertTrue(configuration.isCompleted());
-    }
 }

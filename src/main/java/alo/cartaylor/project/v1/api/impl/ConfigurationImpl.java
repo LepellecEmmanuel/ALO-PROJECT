@@ -21,12 +21,9 @@ public class ConfigurationImpl implements Configuration {
     private CompatibilityChecker compatibilityChecker;
     private Set<Category> availableCategories = Collections.emptySet();
 
-    public ConfigurationImpl(CompatibilityChecker compatibilityChecker) {
+    public ConfigurationImpl(CompatibilityChecker compatibilityChecker, Set<Category> availableCategories) {
         this.compatibilityChecker = compatibilityChecker;
-    }
-
-    void setAvailableCategories(Set<Category> categories) {
-        this.availableCategories = categories == null ? Collections.emptySet() : Set.copyOf(categories);
+        this.availableCategories = availableCategories;
     }
 
     private void checkCategory(Category category) {

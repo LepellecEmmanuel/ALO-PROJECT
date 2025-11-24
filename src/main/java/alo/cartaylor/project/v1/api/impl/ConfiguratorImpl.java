@@ -17,7 +17,7 @@ public class ConfiguratorImpl implements Configurator {
     public ConfiguratorImpl(PartTypeFactoryV2 factory) {
         this.partTypeFactory = factory;
         this.compatibilityChecker = initCompatibilityChecker();
-        this.configuration = new ConfigurationImpl(compatibilityChecker);
+        this.configuration = new ConfigurationImpl(compatibilityChecker, categories);
         partTypes = partTypeFactory.getPartTypes();
     }
 
