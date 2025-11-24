@@ -21,10 +21,10 @@ public class ConfigurationTest {
 
     @BeforeEach
     public void setup() {
-        configurator = new ConfiguratorImpl();
+        factory = new PartTypeFactoryV2();
+        configurator = new ConfiguratorImpl(factory);
         configuration = configurator.getConfiguration();
         compatibilityChecker = configurator.getCompatibilityChecker();
-        factory = new PartTypeFactoryV2();
     }
 
     @Test
@@ -41,6 +41,15 @@ public class ConfigurationTest {
     @Test
     public void testThatNewConfigurationIsNotCompleted() {
         Assertions.assertFalse(configuration.isCompleted());
+    }
+
+    @Test
+    public void testThatCompletedConfigurationIsComplete() {
+        configuration.selectPart(factory.getPartType("EG100"));
+        configuration.selectPart(factory.getPartType("IN"));
+        configuration.selectPart(factory.getPartType("TM5"));
+        configuration.selectPart(factory.getPartType("XC"));
+        Assertions.assertTrue(configuration.isCompleted());
     }
 
     @Test

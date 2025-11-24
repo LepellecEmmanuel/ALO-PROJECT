@@ -8,15 +8,17 @@ import java.util.stream.Collectors;
 
 public class ConfiguratorImpl implements Configurator {
     private final CategoryFactory categoryFactory = new CategoryFactory();
-    private final PartTypeFactoryV2 partTypeFactory = new PartTypeFactoryV2();
+    private final PartTypeFactoryV2 partTypeFactory;
     private final Set<Category> categories = categoryFactory.getCategories();
-    private final Set<PartType> partTypes = partTypeFactory.getPartTypes();
+    private final Set<PartType> partTypes;
     private final Configuration configuration;
     private final CompatibilityChecker compatibilityChecker;
 
-    public ConfiguratorImpl() {
+    public ConfiguratorImpl(PartTypeFactoryV2 factory) {
+        this.partTypeFactory = factory;
         this.compatibilityChecker = initCompatibilityChecker();
         this.configuration = new ConfigurationImpl(compatibilityChecker);
+        partTypes = partTypeFactory.getPartTypes();
     }
 
     private CompatibilityChecker initCompatibilityChecker() {
