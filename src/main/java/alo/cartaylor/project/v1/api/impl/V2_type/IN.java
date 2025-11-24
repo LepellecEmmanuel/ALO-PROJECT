@@ -4,10 +4,16 @@ import alo.cartaylor.project.v1.api.impl.PartImpl;
 import java.util.Set;
 public class IN extends PartImpl {
     private String upholstery = "standard";
+    private final String price = "89.99";
     public IN() {
         addProperty("upholstery",
                 () -> upholstery,
                 value -> upholstery = value,
                 Set.of("standard", "leather"));
+        addProperty("price",
+                () -> price,
+                value -> { throw new IllegalArgumentException("Price"); },
+                Set.of()
+        );
     }
 }

@@ -2,4 +2,15 @@ package alo.cartaylor.project.v1.api.impl.V2_type;
 
 import alo.cartaylor.project.v1.api.impl.PartImpl;
 
-public class EG100 extends PartImpl { public EG100() {} }
+import java.util.Set;
+
+public class EG100 extends PartImpl {
+    private final String price = "30.00";
+    public EG100() {
+        addProperty("price",
+                () -> price,
+                value -> { throw new IllegalArgumentException("Price"); },
+                Set.of()
+        );
+    }
+}

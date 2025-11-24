@@ -5,10 +5,16 @@ import java.util.Set;
 public class XM extends PartImpl {
     public enum Color { RED, BLUE }
     private Color paintcolor = Color.RED;
+    private final String price = "30.00";
     public XM() {
         addProperty("paintcolor",
                 () -> paintcolor.name(),
                 value -> paintcolor = Color.valueOf(value.toUpperCase()),
                 Set.of("RED", "BLUE"));
+        addProperty("price",
+                () -> price,
+                value -> { throw new IllegalArgumentException("Price"); },
+                Set.of()
+        );
     }
 }

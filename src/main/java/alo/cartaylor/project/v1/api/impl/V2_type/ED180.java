@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 public class ED180 extends PartImpl {
-    private String price = "25.25";
+    private final String price = "25.25";
     public ED180() {
         addProperty("price",
                 () -> price,
