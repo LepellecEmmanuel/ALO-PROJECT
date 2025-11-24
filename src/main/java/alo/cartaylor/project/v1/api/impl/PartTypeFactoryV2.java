@@ -14,6 +14,16 @@ public class PartTypeFactoryV2 {
     private Set<PartType> partypes = new HashSet<>();
 
     private void generate() {
+        partypes.add(new PartTypeImpl("ED180", ED180.class, categoryFactory.getCategory("Engine")));
+        partypes.add(new PartTypeImpl("EG100", EG100.class, categoryFactory.getCategory("Engine")));
+        partypes.add(new PartTypeImpl("EG110", EG110.class, categoryFactory.getCategory("Engine")));
+        partypes.add(new PartTypeImpl("EG133", EG133.class, categoryFactory.getCategory("Engine")));
+        partypes.add(new PartTypeImpl("EG210", EG210.class, categoryFactory.getCategory("Engine")));
+        partypes.add(new PartTypeImpl("EH120", EH120.class, categoryFactory.getCategory("Engine")));
+
+        partypes.add(new PartTypeImpl("TA5", TA5.class, categoryFactory.getCategory("Engine")));
+
+
         partypes.add(new PartTypeImpl("XS", XS.class, categoryFactory.getCategory("Exterior")));
         partypes.add(new PartTypeImpl("IS", IS.class, categoryFactory.getCategory("Interior")));
     }
