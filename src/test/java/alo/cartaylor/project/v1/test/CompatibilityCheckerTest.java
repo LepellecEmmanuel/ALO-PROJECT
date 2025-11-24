@@ -17,7 +17,6 @@ public class CompatibilityCheckerTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             checker.getIncompatibilities(reference);
         });
-        // Arrange dsdsdsdsdsfsfsfsfsfsfsfsf
     }
 
 }

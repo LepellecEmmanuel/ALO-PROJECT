@@ -4,6 +4,8 @@ import alo.cartaylor.project.v1.api.*;
 
 import java.io.PrintStream;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -19,11 +21,11 @@ public class ConfigurationImpl implements Configuration {
 
     // Bound by ConfiguratorImpl (package visible setters)
     private CompatibilityChecker compatibilityChecker;
-    private Set<Category> availableCategories = Collections.emptySet();
+    private Set<Category> availableCategories;
 
     public ConfigurationImpl(CompatibilityChecker compatibilityChecker, Set<Category> availableCategories) {
         this.compatibilityChecker = compatibilityChecker;
-        this.availableCategories = availableCategories;
+        this.availableCategories = Set.copyOf(availableCategories);
     }
 
     private void checkCategory(Category category) {

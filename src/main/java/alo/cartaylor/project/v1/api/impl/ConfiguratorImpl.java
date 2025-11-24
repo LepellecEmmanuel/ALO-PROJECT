@@ -7,15 +7,15 @@ import java.util.stream.Collectors;
 
 
 public class ConfiguratorImpl implements Configurator {
-    private final CategoryFactory categoryFactory = new CategoryFactory();
     private final PartTypeFactoryV2 partTypeFactory;
-    private final Set<Category> categories = categoryFactory.getCategories();
+    private final Set<Category> categories;
     private final Set<PartType> partTypes;
     private final Configuration configuration;
     private final CompatibilityChecker compatibilityChecker;
 
     public ConfiguratorImpl(PartTypeFactoryV2 factory) {
         this.partTypeFactory = factory;
+        categories = factory.getCategories();
         this.compatibilityChecker = initCompatibilityChecker();
         this.configuration = new ConfigurationImpl(compatibilityChecker, categories);
         partTypes = partTypeFactory.getPartTypes();

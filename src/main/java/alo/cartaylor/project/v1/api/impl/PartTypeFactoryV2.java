@@ -59,4 +59,8 @@ public class PartTypeFactoryV2 {
     public Category getCategory(String name) {
         return categoryFactory.getCategory(name);
     }
+
+    public Set<Category> getCategories() {
+        return categoryFactory.getCategories();
+    }
 }
