@@ -18,11 +18,11 @@ public class ConfigurationImpl implements Configuration {
     private final Map<Category, Part> selections = new HashMap<>();
 
     // Bound by ConfiguratorImpl (package visible setters)
-    private CompatibilityChecker compatibilityChecker = null;
+    private CompatibilityChecker compatibilityChecker;
     private Set<Category> availableCategories = Collections.emptySet();
 
-    void setCompatibilityChecker(CompatibilityChecker checker) {
-        this.compatibilityChecker = checker;
+    public ConfigurationImpl(CompatibilityChecker compatibilityChecker) {
+        this.compatibilityChecker = compatibilityChecker;
     }
 
     void setAvailableCategories(Set<Category> categories) {

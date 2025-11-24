@@ -32,7 +32,7 @@ public class PartTypeFactoryV2 {
 
         partypes.add(new PartTypeImpl("XS", XS.class, categoryFactory.getCategory("Exterior")));
         partypes.add(new PartTypeImpl("XM", XM.class, categoryFactory.getCategory("Exterior")));
-        partypes.add(new PartTypeImpl("XS", XS.class, categoryFactory.getCategory("Exterior")));
+        partypes.add(new PartTypeImpl("XC", XC.class, categoryFactory.getCategory("Exterior")));
 
         partypes.add(new PartTypeImpl("IS", IS.class, categoryFactory.getCategory("Interior")));
         partypes.add(new PartTypeImpl("IH", IH.class, categoryFactory.getCategory("Interior")));
@@ -47,12 +47,16 @@ public class PartTypeFactoryV2 {
         return  Collections.unmodifiableSet(partypes);
     }
 
-    public Part getPart(String name) {
+    public PartType getPartType(String name) {
         for (PartType partType : partypes) {
             if (partType.getName().equals(name)) {
-                return partType.newInstance();
+                return partType;
             }
         }
         return null;
+    }
+
+    public Category getCategory(String name) {
+        return categoryFactory.getCategory(name);
     }
 }

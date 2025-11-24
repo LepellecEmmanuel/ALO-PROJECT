@@ -7,16 +7,32 @@ import java.util.stream.Collectors;
 
 
 public class ConfiguratorImpl implements Configurator {
-    private final Set<Category> categories = CategoryFactory.generate();
-    private final Set<PartType> partTypes = PartTypeFactoryV1.generate();
+    private final CategoryFactory categoryFactory = new CategoryFactory();
+    private final PartTypeFactoryV2 partTypeFactory = new PartTypeFactoryV2();
+    private final Set<Category> categories = categoryFactory.getCategories();
+    private final Set<PartType> partTypes = partTypeFactory.getPartTypes();
     private final Configuration configuration;
     private final CompatibilityChecker compatibilityChecker;
 
-    public ConfiguratorImpl(Configuration configuration, CompatibilityChecker compatibilityChecker) {
-        this.configuration = configuration;
-        this.compatibilityChecker = compatibilityChecker;
+    public ConfiguratorImpl() {
+        this.compatibilityChecker = initCompatibilityChecker();
+        this.configuration = new ConfigurationImpl(compatibilityChecker);
     }
 
+    private CompatibilityChecker initCompatibilityChecker() {
+        CompatibilityManager manager = new CompatibilityManagerImpl();
+        manager.addRequirements(partTypeFactory.getPartType("EH120"), Set.of(partTypeFactory.getPartType("TC120")));
+        manager.addRequirements(partTypeFactory.getPartType("TC120"), Set.of(partTypeFactory.getPartType("EH120")));
+        manager.addRequirements(partTypeFactory.getPartType("XS"), Set.of(partTypeFactory.getPartType("IS")));
+        manager.addRequirements(partTypeFactory.getPartType("IS"), Set.of(partTypeFactory.getPartType("XS")));
+        manager.addIncompatibilities(partTypeFactory.getPartType("TA5"), Set.of(partTypeFactory.getPartType("EG100")));
+        manager.addIncompatibilities(partTypeFactory.getPartType("TSF7"), Set.of(partTypeFactory.getPartType("EG100"), partTypeFactory.getPartType("EG133"), partTypeFactory.getPartType("EG110")));
+        manager.addIncompatibilities(partTypeFactory.getPartType("XC"), Set.of(partTypeFactory.getPartType("EG210")));
+        manager.addIncompatibilities(partTypeFactory.getPartType("XM"), Set.of(partTypeFactory.getPartType("EG100")));
+        manager.addIncompatibilities(partTypeFactory.getPartType("XS"), Set.of(partTypeFactory.getPartType("EG100")));
+        manager.addIncompatibilities(partTypeFactory.getPartType("IS"), Set.of(partTypeFactory.getPartType("EG100"), partTypeFactory.getPartType("TM5")));
+        return (CompatibilityChecker) manager;
+    }
 
     @Override
     public Set<Category> getCategories() {
