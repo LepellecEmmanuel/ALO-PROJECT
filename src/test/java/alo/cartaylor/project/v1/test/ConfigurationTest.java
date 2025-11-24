@@ -3,6 +3,7 @@ package alo.cartaylor.project.v1.test;
 import alo.cartaylor.project.v1.api.CompatibilityChecker;
 import alo.cartaylor.project.v1.api.Configuration;
 import alo.cartaylor.project.v1.api.Configurator;
+import alo.cartaylor.project.v1.api.PartType;
 import alo.cartaylor.project.v1.api.impl.CompatibilityManagerImpl;
 import alo.cartaylor.project.v1.api.impl.ConfigurationImpl;
 import alo.cartaylor.project.v1.api.impl.ConfiguratorImpl;
@@ -11,6 +12,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Objects;
 
 public class ConfigurationTest {
@@ -115,6 +122,29 @@ public class ConfigurationTest {
     public void testThatUncompletedConfigurationIsNotComplete() {
         configuration.selectPart(factory.getPartType("EG100"));
         Assertions.assertFalse(configuration.isCompleted());
+    }
+
+    @Test
+    public void testPrintDescriptionThrowsIfIncompleteOrInvalid() {
+        Exception ex = assertThrows(IllegalStateException.class, () -> configuration.printDescription(System.out));
+        assertTrue(ex.getMessage().contains("complete and valid"));
+    }
+
+    @Test
+    public void testPrintDescriptionProducesHTML() {
+        // sélectionner toutes les catégories pour que la configuration soit complète
+        configuration.selectPart(factory.getPartType("EG100"));
+        configuration.selectPart(factory.getPartType("IN"));
+        configuration.selectPart(factory.getPartType("TM5"));
+        configuration.selectPart(factory.getPartType("XC"));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        configuration.printDescription(new PrintStream(baos));
+        String html = baos.toString();
+        assertTrue(html.contains("<html>"));
+        assertTrue(html.contains("EG100"));
+        assertTrue(html.contains("XC"));
+        assertTrue(html.contains("Total price"));
     }
 
 }
