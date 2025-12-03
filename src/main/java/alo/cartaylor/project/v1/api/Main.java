@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Main {
+    /*  Welcome to V1 */
 
     static String getConfiguration(Configurator configurator) {
         String result = "";
